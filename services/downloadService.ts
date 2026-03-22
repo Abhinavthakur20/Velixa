@@ -48,6 +48,14 @@ function deriveFailureMessage(jobId: string): string {
     return "This video is unavailable.";
   }
 
+  if (
+    recent.includes("too many requests") ||
+    recent.includes("sign in to confirm you're not a bot") ||
+    recent.includes("use --cookies-from-browser or --cookies")
+  ) {
+    return "YouTube blocked the server IP (429/anti-bot). Add YTDLP_COOKIES_PATH cookies or use non-datacenter hosting.";
+  }
+
   return "Audio download failed. You can retry this video.";
 }
 

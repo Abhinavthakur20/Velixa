@@ -12,3 +12,5 @@ services:
         value: 10000
       - key: DOWNLOADS_DIR
         value: downloads
+      - key: YTDLP_COOKIES_PATH
+        value: /etc/velixa/cookies.txt

@@ -3,6 +3,7 @@ import fs from "node:fs";
 import { createInterface } from "node:readline";
 import path from "node:path";
 import ffmpegStatic from "ffmpeg-static";
+import { env } from "@/lib/env";
 import { sanitizePlaylistTitle } from "@/utils/sanitizer";
 import type { DownloadOptions, PlaylistMetadata, VideoItem } from "@/types";
 
@@ -33,6 +34,24 @@ const MOBILE_SAFE_AUDIO_FORMAT_WITH_FFMPEG =
   "bestaudio[ext=m4a]/bestaudio[ext=mp4]/bestaudio[acodec^=mp4a]/bestaudio[ext=aac]/bestaudio/best";
 const MOBILE_SAFE_PREVIEW_FORMAT =
   "bestaudio[ext=m4a]/bestaudio[ext=mp4]/bestaudio[acodec^=mp4a]/bestaudio[ext=aac]/best[ext=mp4]/best";
+
+function resolveCookiesPath(): string | null {
+  const inlineCookies = env.YTDLP_COOKIES_CONTENT?.trim();
+  if (inlineCookies) {
+    const targetDir = path.resolve(process.cwd(), ".cache");
+    const targetPath = path.join(targetDir, "yt-cookies.txt");
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.writeFileSync(targetPath, inlineCookies, "utf8");
+    return targetPath;
+  }
+
+  const candidate = env.YTDLP_COOKIES_PATH?.trim();
+  if (!candidate) {
+    return null;
+  }
+  const resolved = path.resolve(candidate);
+  return fs.existsSync(resolved) ? resolved : null;
+}
 
 function resolveYtDlpBinary(): string {
   const custom = process.env.YTDLP_PATH?.trim();
@@ -104,9 +123,17 @@ interface RawYtDlpPlaylist {
 
 export function fetchPreviewAudioUrl(videoId: string): Promise<string> {
   return new Promise((resolve, reject) => {
+    const cookiesPath = resolveCookiesPath();
+    const args = [
+      "-f",
+      MOBILE_SAFE_PREVIEW_FORMAT,
+      "--get-url",
+      `https://www.youtube.com/watch?v=${videoId}`,
+      ...(cookiesPath ? ["--cookies", cookiesPath] : []),
+    ];
     const process = spawn(
       resolveYtDlpBinary(),
-      ["-f", MOBILE_SAFE_PREVIEW_FORMAT, "--get-url", `https://www.youtube.com/watch?v=${videoId}`],
+      args,
       {
         stdio: ["ignore", "pipe", "pipe"],
       },
@@ -154,7 +181,9 @@ export function fetchPreviewAudioUrl(videoId: string): Promise<string> {
 
 export function fetchPlaylistMetadata(url: string): Promise<PlaylistMetadata> {
   return new Promise((resolve, reject) => {
-    const process = spawn(resolveYtDlpBinary(), ["--flat-playlist", "-J", "--no-warnings", url], {
+    const cookiesPath = resolveCookiesPath();
+    const args = ["--flat-playlist", "-J", "--no-warnings", ...(cookiesPath ? ["--cookies", cookiesPath] : []), url];
+    const process = spawn(resolveYtDlpBinary(), args, {
       stdio: ["ignore", "pipe", "pipe"],
     });
 
@@ -213,6 +242,7 @@ export function fetchPlaylistMetadata(url: string): Promise<PlaylistMetadata> {
 export function downloadVideos(opts: DownloadOptions): ChildProcess {
   const ffmpegBinary = resolveFfmpegBinary();
   const hasFfmpeg = Boolean(ffmpegBinary && binaryExists(ffmpegBinary));
+  const cookiesPath = resolveCookiesPath();
 
   const outputTemplate = path.join(
     opts.downloadsDir,
@@ -234,6 +264,7 @@ export function downloadVideos(opts: DownloadOptions): ChildProcess {
         "after_move:%(filepath)s",
         "-o",
         outputTemplate,
+        ...(cookiesPath ? ["--cookies", cookiesPath] : []),
         "--match-filter",
         `id~="${opts.videoIds.join("|")}"`,
         opts.url,
@@ -246,6 +277,7 @@ export function downloadVideos(opts: DownloadOptions): ChildProcess {
         "after_move:%(filepath)s",
         "-o",
         outputTemplate,
+        ...(cookiesPath ? ["--cookies", cookiesPath] : []),
         "--match-filter",
         `id~="${opts.videoIds.join("|")}"`,
         opts.url,
