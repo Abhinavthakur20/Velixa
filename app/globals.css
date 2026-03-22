@@ -1,0 +1,381 @@
+@import "tailwindcss";
+
+:root {
+  --velixa-obsidian: #000000;
+  --velixa-graphite: #121212;
+  --velixa-panel: rgba(24, 24, 24, 0.9);
+  --velixa-panel-strong: rgba(30, 30, 30, 0.98);
+  --velixa-border: rgba(255, 255, 255, 0.08);
+  --velixa-border-strong: rgba(255, 255, 255, 0.14);
+  --velixa-gold: #1ed760;
+  --velixa-gold-soft: #1db954;
+  --velixa-ivory: #ffffff;
+  --velixa-mist: #b3b3b3;
+  --velixa-success: #1ed760;
+  --velixa-danger: #f15e6c;
+  --velixa-info: #5ee68b;
+  --velixa-indigo: #1db954;
+  --velixa-violet: #34c759;
+  --velixa-rose: #1ed760;
+  --velixa-sky: #8e8e93;
+}
+
+@theme inline {
+  --color-background: var(--velixa-obsidian);
+  --color-foreground: var(--velixa-ivory);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-dm-sans);
+}
+
+body {
+  font-family: var(--font-dm-sans), sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(29, 185, 84, 0.12), transparent 18%),
+    radial-gradient(circle at bottom right, rgba(29, 185, 84, 0.08), transparent 22%),
+    linear-gradient(180deg, #090909 0%, #000000 100%);
+  color: var(--velixa-ivory);
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(29, 185, 84, 0.25);
+  color: var(--velixa-ivory);
+}
+
+.velixa-display {
+  font-family: var(--font-dm-sans), sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.velixa-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.velixa-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 160px 160px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 88%);
+  z-index: -1;
+}
+
+.velixa-panel {
+  background: var(--velixa-panel);
+  border: 1px solid var(--velixa-border);
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+}
+
+.velixa-card {
+  background: linear-gradient(180deg, rgba(29, 29, 29, 0.98), rgba(22, 22, 22, 0.96));
+  border: 1px solid var(--velixa-border);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.velixa-island {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 20% 50%, rgba(30, 215, 96, 0.18), transparent 30%),
+    radial-gradient(circle at 80% 50%, rgba(30, 215, 96, 0.1), transparent 26%),
+    linear-gradient(180deg, rgba(28, 28, 28, 0.96), rgba(11, 11, 11, 0.98));
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.velixa-island::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(30, 215, 96, 0.08), transparent 24%, transparent 76%, rgba(30, 215, 96, 0.08)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 55%);
+  pointer-events: none;
+}
+
+.velixa-island-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--velixa-success);
+  box-shadow:
+    0 0 0 4px rgba(30, 215, 96, 0.12),
+    0 0 22px rgba(30, 215, 96, 0.48);
+}
+
+.velixa-glow {
+  position: relative;
+}
+
+.velixa-glow::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% -24% 12%;
+  height: 44%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, rgba(30, 215, 96, 0.28), rgba(30, 215, 96, 0) 68%);
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.velixa-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--velixa-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--velixa-mist);
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+}
+
+.velixa-button {
+  border-radius: 999px;
+  border: 1px solid rgba(29, 185, 84, 0.25);
+  background: linear-gradient(135deg, #1db954, #1ed760);
+  color: #000000;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.velixa-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(30, 215, 96, 0.42);
+  box-shadow: 0 16px 34px rgba(29, 185, 84, 0.24);
+}
+
+.velixa-button:disabled {
+  opacity: 0.45;
+  transform: none;
+  box-shadow: none;
+}
+
+.velixa-button-ghost {
+  border-radius: 999px;
+  border: 1px solid var(--velixa-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--velixa-ivory);
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.velixa-button-ghost:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--velixa-border-strong);
+}
+
+.velixa-input {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--velixa-ivory);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.velixa-input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.velixa-input:focus {
+  outline: none;
+  border-color: rgba(29, 185, 84, 0.32);
+  box-shadow:
+    0 0 0 4px rgba(29, 185, 84, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.velixa-animate-in {
+  animation: velixa-fade-up 540ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.velixa-nav {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(18, 18, 18, 0.82);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(18px);
+}
+
+.velixa-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(29, 185, 84, 0.18), transparent 20%),
+    radial-gradient(circle at 84% 20%, rgba(29, 185, 84, 0.1), transparent 16%),
+    linear-gradient(180deg, rgba(20, 20, 20, 0.98), rgba(0, 0, 0, 0.99));
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.velixa-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 10% -18% 10%;
+  height: 40%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at center, rgba(30, 215, 96, 0.18), transparent 60%);
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+.velixa-hero-copy {
+  position: relative;
+}
+
+.velixa-hero-copy::after {
+  content: "";
+  position: absolute;
+  right: -2rem;
+  top: 10%;
+  bottom: 10%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  display: none;
+}
+
+.velixa-hero-metrics {
+  position: relative;
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 20px 48px rgba(0, 0, 0, 0.2);
+}
+
+.velixa-hero-metrics::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 14% 20%, rgba(30, 215, 96, 0.1), transparent 18%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 50%);
+  pointer-events: none;
+}
+
+.velixa-hero-stat {
+  min-height: 7.75rem;
+}
+
+.velixa-hero-stat-active {
+  border-color: rgba(114, 184, 255, 0.2);
+  background:
+    radial-gradient(circle at 20% 50%, rgba(114, 184, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(28, 28, 28, 0.96), rgba(11, 11, 11, 0.98));
+}
+
+.velixa-hero-grid {
+  position: absolute;
+  inset: auto 5% 8% auto;
+  width: min(440px, 74%);
+  height: 240px;
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 24% 70%, rgba(29, 185, 84, 0.18), transparent 20%),
+    radial-gradient(circle at 72% 34%, rgba(29, 215, 96, 0.12), transparent 20%),
+    linear-gradient(145deg, #1c1c1c 0%, #121212 48%, #090909 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.velixa-hero-grid::before {
+  content: "";
+  position: absolute;
+  inset: 18% 10% 18% 10%;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, black 52%, transparent 100%);
+}
+
+.velixa-hero-grid::after {
+  content: "";
+  position: absolute;
+  inset: auto 8% 10% 8%;
+  height: 38%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 22% 50%, rgba(29, 185, 84, 0.34), transparent 20%),
+    radial-gradient(circle at 54% 50%, rgba(29, 215, 96, 0.18), transparent 20%),
+    radial-gradient(circle at 82% 50%, rgba(29, 185, 84, 0.26), transparent 18%);
+  filter: blur(16px);
+}
+
+.velixa-signal-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(circle at top right, rgba(29, 185, 84, 0.14), transparent 24%),
+    linear-gradient(180deg, rgba(28, 28, 28, 0.96), rgba(18, 18, 18, 0.96));
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.velixa-signal-card::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: -8%;
+  bottom: -12%;
+  height: 48%;
+  background:
+    radial-gradient(circle at 10% 60%, rgba(29, 185, 84, 0.18), transparent 18%),
+    radial-gradient(circle at 46% 42%, rgba(29, 215, 96, 0.14), transparent 18%),
+    radial-gradient(circle at 76% 52%, rgba(29, 185, 84, 0.14), transparent 16%);
+  filter: blur(12px);
+}
+
+.velixa-section-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .velixa-hero-copy::after {
+    display: block;
+  }
+}
+
+@keyframes velixa-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
