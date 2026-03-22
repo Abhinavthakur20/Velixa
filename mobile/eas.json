@@ -1,7 +1,10 @@
 {
   "build": {
     "preview": {
-      "android": { "buildType": "apk" }
+      "android": { "buildType": "apk" },
+      "env": {
+        "EXPO_PUBLIC_API_BASE_URL": "https://velixa-t2s7.onrender.com"
+      }
     }
   }
 }
